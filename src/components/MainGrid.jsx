@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import Block from "./Block.jsx";
 
+
 const MainGrid = ({width, height}) => {
     const blockStates = {
         BOMB: "bomb",
@@ -12,7 +13,7 @@ const MainGrid = ({width, height}) => {
     
     useEffect(() => {
         const initial = Array.from({ length: height }, () => Array.from({ length: width }, () => blockStates.COVERED))
-        let count = 0, totalBombs = width;
+        let count = 0, totalBombs = width + height;
         while (count < totalBombs) {
             let a = Math.floor(Math.random() * width);
             let b = Math.floor(Math.random() * height);
@@ -21,10 +22,41 @@ const MainGrid = ({width, height}) => {
             
             count++;
         }
-        // eslint-disable-next-line react-hooks/set-state-in-effect
         setGrid(initial);
- 
     }, [width, height])
+
+     const dirs = [[-1, 0], [1, 0], [0, -1], [0, 1],
+                    [-1, -1], [-1, 1], [1, -1], [1, 1]];
+
+    const countBombNear = (i, j) =>{
+        let c = 0;
+
+        dirs.forEach(d => {
+            let dx = i+d[0];
+            let dy = j+d[1];
+            if(dx >= 0 && dx < height && dy >= 0 && dy < width) {
+                if(grid[dx][dy] === blockStates.BOMB) c++;
+            }
+        })
+        return c;
+    }
+
+    const getNewGrid = (newGrid, i, j) => {
+        if(countBombNear(i, j) > 0) {
+            return;
+        }
+
+        dirs.forEach(d => {
+            let dx = i+d[0];
+            let dy = j+d[1];
+            if(dx >= 0 && dx < height && dy >= 0 && dy < width) {
+                if(newGrid[dx][dy] === blockStates.COVERED) {
+                    newGrid[dx][dy] = blockStates.UNCOVERED;
+                    getNewGrid(newGrid, dx, dy);
+                }
+            }
+        })
+    }
     
     
     const handleClick = (rowIdx, colIdx) => {
@@ -34,7 +66,9 @@ const MainGrid = ({width, height}) => {
             console.log("Game over!");
             return;
         }
-        let newGrid = [...grid];
+        console.log(countBombNear(rowIdx, colIdx))
+        let newGrid = grid.map(row => [...row])
+        getNewGrid(newGrid, rowIdx, colIdx);
         newGrid[rowIdx][colIdx] = blockStates.UNCOVERED;
         setGrid(newGrid);
     }
@@ -51,7 +85,6 @@ const MainGrid = ({width, height}) => {
             <div style={style}>
                 {grid.map((row, rowIdx) => (
                     row.map((col,colIdx) => (
-                        // console.log(col)
                         <Block key={3*rowIdx + colIdx} 
                             covered={col==="covered"} bomb={col==="bomb"} handleClick={handleClick}
                             rowIdx={rowIdx} colIdx={colIdx}
