@@ -41,10 +41,12 @@ const MainGrid = ({width, height}) => {
         return c;
     }
 
-    const getNewGrid = (newGrid, i, j) => {
+    const updateGrid = (newGrid, i, j) => {
         if(countBombNear(i, j) > 0) {
+            newGrid[i][j] = blockStates.UNCOVERED;
             return;
         }
+        newGrid[i][j] = blockStates.UNCOVERED;
 
         dirs.forEach(d => {
             let dx = i+d[0];
@@ -52,7 +54,7 @@ const MainGrid = ({width, height}) => {
             if(dx >= 0 && dx < height && dy >= 0 && dy < width) {
                 if(newGrid[dx][dy] === blockStates.COVERED) {
                     newGrid[dx][dy] = blockStates.UNCOVERED;
-                    getNewGrid(newGrid, dx, dy);
+                    updateGrid(newGrid, dx, dy);
                 }
             }
         })
@@ -66,28 +68,26 @@ const MainGrid = ({width, height}) => {
             console.log("Game over!");
             return;
         }
-        console.log(countBombNear(rowIdx, colIdx))
         let newGrid = grid.map(row => [...row])
-        getNewGrid(newGrid, rowIdx, colIdx);
-        newGrid[rowIdx][colIdx] = blockStates.UNCOVERED;
+        updateGrid(newGrid, rowIdx, colIdx);
         setGrid(newGrid);
     }
 
     const style = {
         display: "grid",
         gridTemplateColumns: `repeat(${width}, 1fr)`,
-        gap: "1px",
+        gap: "2px"
     }; 
     
     return (
         <div>
-            {width} and {height}
             <div style={style}>
                 {grid.map((row, rowIdx) => (
                     row.map((col,colIdx) => (
                         <Block key={3*rowIdx + colIdx} 
                             covered={col==="covered"} bomb={col==="bomb"} handleClick={handleClick}
                             rowIdx={rowIdx} colIdx={colIdx}
+                            val={col===blockStates.UNCOVERED ? countBombNear(rowIdx, colIdx) : 0}
                         />
                     ))
                 ))}

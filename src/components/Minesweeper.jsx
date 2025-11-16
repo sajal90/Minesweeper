@@ -1,5 +1,6 @@
 import { useState } from "react";
 import MainGrid from "./MainGrid.jsx";
+
 const Minesweeper = () => {
     const [width, setWidth] = useState(10);
     const [height, setHeight] = useState(10);
@@ -9,10 +10,10 @@ const Minesweeper = () => {
             setHeight(10);
             setWidth(10);
         } else if(difficulty === "Medium") {
-            setHeight(15);
+            setHeight(12);
             setWidth(15);
         } else {
-            setHeight(20);
+            setHeight(12);
             setWidth(20);
         }
     }
@@ -21,10 +22,11 @@ const Minesweeper = () => {
         <div>
             <h1>Minesweeper</h1>
             <div>
-                <button type="button" onClick={() => handleClick("Easy")}>Easy</button>
-                <button type="button" onClick={() => handleClick("Medium")}>Medium</button>
-                <button type="button" onClick={() => handleClick("Hard")}>Hard</button>
+                <button className="diff-button" type="button" onClick={() => handleClick("Easy")}>Easy</button>
+                <button className="diff-button" type="button" onClick={() => handleClick("Medium")}>Medium</button>
+                <button className="diff-button" type="button" onClick={() => handleClick("Hard")}>Hard</button>
             </div>
+            <br></br>
             <MainGrid width={width} height={height}></MainGrid>
         </div>
     )
