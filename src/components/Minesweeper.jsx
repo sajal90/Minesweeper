@@ -1,19 +1,19 @@
 import { useState } from "react";
-import MainGrid from "./MainGrid";
+import MainGrid from "./MainGrid.jsx";
 const Minesweeper = () => {
-    const [width, setWidth] = useState(50);
-    const [height, setHeight] = useState(50);
+    const [width, setWidth] = useState(10);
+    const [height, setHeight] = useState(10);
     
     const handleClick = (difficulty) => {
         if(difficulty === "Easy") {
-            setHeight(50);
-            setWidth(50);
+            setHeight(10);
+            setWidth(10);
         } else if(difficulty === "Medium") {
-            setHeight(100);
-            setWidth(100);
+            setHeight(15);
+            setWidth(15);
         } else {
-            setHeight(200);
-            setWidth(200);
+            setHeight(20);
+            setWidth(20);
         }
     }
 
