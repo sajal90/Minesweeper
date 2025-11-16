@@ -1,7 +1,6 @@
-const Block = ({covered, bomb}) => {
+const Block = ({covered, bomb, handleClick, rowIdx, colIdx}) => {
     const style = {
-        color: "white",
-        backgroundColor: "white",
+        backgroundColor: !covered&&!bomb ? "grey" : bomb ? "black" : "white" ,
         width: "30px",
         height: "30px",
         borderRadius: "8px",
@@ -9,17 +8,9 @@ const Block = ({covered, bomb}) => {
         padding: "0.6em 1.2em",
     }
 
-    const handleClick = () => {
-        if(!covered) return;
-       // if(covered && bomb) 
-            // show game over
-        // else
-            // uncover current and neighbouring if possible
-    }
-
     return (
         <div>
-            <button style={style} type="button" onClick={handleClick}></button>
+            <button style={style} type="button" onClick={() => handleClick(rowIdx, colIdx)}></button>
         </div>
     )
 }

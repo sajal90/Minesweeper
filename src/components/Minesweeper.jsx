@@ -19,7 +19,7 @@ const Minesweeper = () => {
 
     return (
         <div>
-            <h2>Minesweeper</h2>
+            <h1>Minesweeper</h1>
             <div>
                 <button type="button" onClick={() => handleClick("Easy")}>Easy</button>
                 <button type="button" onClick={() => handleClick("Medium")}>Medium</button>
